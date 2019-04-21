@@ -5,11 +5,11 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                      level=logging.INFO)
 
 
-def echo(update, context):
-    context.bot.send_message(chat_id=update.message.chat_id, text=update.message.text)
+def echo(bot, update):
+    bot.send_message(chat_id=update.message.chat_id, text=update.message.text)
 
 
-TOKEN = "820703303:AAHZXbuIVVA4oQm4s6SrxNtV7WX9m1xNGw8"
+TOKEN = os.environ["TOKEN"]
 PORT = int(os.environ.get('PORT', '8443'))
 updater = telegram.ext.Updater(token=TOKEN)
 dispatcher = updater.dispatcher
