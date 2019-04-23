@@ -12,7 +12,7 @@ class GoogleAuth:
             'client_secret.json',
             scopes=['https://www.googleapis.com/auth/calendar.events'])
         flow.redirect_uri = "https://server-for-task-bot.herokuapp.com/login"
-        state = base64.urlsafe_b64decode(self.chat_id)
+        state = base64.urlsafe_b64decode(str(self.chat_id))
         authorization_url, st = flow.authorization_url(
             access_type='offline',
             state=state,
