@@ -4,7 +4,7 @@ class Database:
 
     def __new__(cls, *args, **kwargs):
         if cls.__instance is None:
-            cls.__instance = super(cls).__new__(cls, *args, **kwargs)
+            cls.__instance = super().__new__(cls, *args, **kwargs)
             cls.__instance.ids = []
             cls.__instance.auth_tokens = {}
         return cls.__instance
