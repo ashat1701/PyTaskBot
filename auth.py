@@ -10,7 +10,7 @@ class GoogleAuth:
     def generate_url(self):
         flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
             'client_secret.json',
-            scope=['https://www.googleapis.com/auth/calendar.events'])
+            scopes=['https://www.googleapis.com/auth/calendar.events'])
         flow.redirect_uri = "https://server-for-task-bot.herokuapp.com/login"
         state = base64.urlsafe_b64decode(self.chat_id)
         authorization_url, st = flow.authorization_url(
