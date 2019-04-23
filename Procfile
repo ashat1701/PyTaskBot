@@ -1,1 +1,1 @@
-web: python setup.py & gunicorn webserver:app & wait -n
+web: python setup.py
