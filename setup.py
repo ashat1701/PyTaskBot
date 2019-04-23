@@ -1,12 +1,10 @@
 import telegram.ext
 import os
-import webserver
 import logging
+
+
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                      level=logging.INFO)
-webserver.init()
-webserver.app.run()
-
 
 def echo(bot, update):
     bot.send_message(chat_id=update.message.chat_id, text=update.message.text)
