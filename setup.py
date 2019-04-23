@@ -9,17 +9,17 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 # TODO: delete this after debug
 def echo(update, context):
-    update.bot.send_message(chat_id=update.message.chat_id, text=update.message.text)
+    context.bot.send_message(chat_id=update.message.chat_id, text=update.message.text)
 
 
 def login(update, context):
     db = database.Database()
     chat_id = update.message.chat_id
     if db.is_token(chat_id):
-        update.bot.send_message(chat_id=chat_id, text="Вы уже вошли в свой аккаунт.")
+        context.bot.send_message(chat_id=chat_id, text="Вы уже вошли в свой аккаунт.")
     else:
         googleAuth = auth.GoogleAuth(chat_id)
-        update.bot.send_message(chat_id=chat_id, text=googleAuth.generate_url())
+        context.bot.send_message(chat_id=chat_id, text=googleAuth.generate_url())
 
 
 TOKEN = os.environ["TOKEN"]
