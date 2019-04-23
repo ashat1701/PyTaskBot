@@ -1,9 +1,8 @@
 from flask import Flask, render_template
 
-
+app = Flask(__name__)
 def init():
-    global app
-    app = Flask(__name__)
+    pass
 
 
 @app.route('/login', methods=['GET, POST'])
