@@ -26,7 +26,8 @@ def login(update, context):
 def start_callback(update, context):
     args = "".join(context.args)
     if args == "":
-        context.bot.send_message(chat_id=int(update.message.chat_id), text="Здравствуйте! Вам нужно войти в свой аккаунт Google для использования этого бота")
+        reply_markup = telegram.ReplyKeyboardMarkup(["Login"])
+        context.bot.send_message(chat_id=int(update.message.chat_id), text="Здравствуйте! Вам нужно войти в свой аккаунт Google для использования этого бота", reply_markup=reply_markup)
     else:
         db = database.Database()
         chat_id = args
@@ -34,6 +35,7 @@ def start_callback(update, context):
             context.bot.send_message(chat_id=int(chat_id), text="Вы успешно вошли в аккаунт")
         else:
             context.bot.send_message(chat_id=int(chat_id), text="Вам необходимо войти в аккаунт. Используйте /login")
+
 
 
 TOKEN = os.environ["TOKEN"]
