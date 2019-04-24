@@ -8,6 +8,12 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                      level=logging.INFO)
 
 
+def get_menu():
+    buttons = [["/plan", "/get_today_tasks"], ["/logout"]]
+    reply_markup = telegram.ReplyKeyboardMarkup(buttons, resize_keyboard=True)
+    return reply_markup
+
+
 # TODO: delete this after debug
 def echo(update, context):
     context.bot.send_message(chat_id=update.message.chat_id, text=update.message.text)
@@ -26,15 +32,16 @@ def login(update, context):
 def start_callback(update, context):
     args = "".join(context.args)
     if args == "":
-        reply_markup = telegram.ReplyKeyboardMarkup(["Login"])
+        reply_markup = telegram.ReplyKeyboardMarkup([["/login"]], resize_keyboard=True)
         context.bot.send_message(chat_id=int(update.message.chat_id), text="Здравствуйте! Вам нужно войти в свой аккаунт Google для использования этого бота", reply_markup=reply_markup)
     else:
         db = database.Database()
         chat_id = args
         if db.is_auth(chat_id):
-            context.bot.send_message(chat_id=int(chat_id), text="Вы успешно вошли в аккаунт")
+            context.bot.send_message(chat_id=int(chat_id), text="Вы успешно вошли в аккаунт", reply_markup=get_menu())
         else:
-            context.bot.send_message(chat_id=int(chat_id), text="Вам необходимо войти в аккаунт. Используйте /login")
+            reply_markup = telegram.ReplyKeyboardMarkup([["/login"]], resize_keyboard=True)
+            context.bot.send_message(chat_id=int(chat_id), text="Вам необходимо войти в аккаунт. Используйте /login", reply_markup=reply_markup)
 
 
 
