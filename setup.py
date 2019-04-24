@@ -23,7 +23,7 @@ def login(update, context):
     db = database.Database()
     chat_id = update.message.chat_id
     if db.is_auth(chat_id):
-        context.bot.send_message(chat_id=chat_id, text="Вы уже вошли в свой аккаунт.")
+        context.bot.send_message(chat_id=chat_id, text="Вы уже вошли в свой аккаунт.", reply_markup=get_menu())
     else:
         googleAuth = auth.GoogleAuth(chat_id)
         context.bot.send_message(chat_id=chat_id, text=googleAuth.generate_url())
