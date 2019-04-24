@@ -23,7 +23,7 @@ def login(update, context):
         context.bot.send_message(chat_id=chat_id, text=googleAuth.generate_url())
 
 
-def start_callback(update, context, args):
+def start_callback(update, context, args=""):
     if args == "":
         context.bot.send_message(chat_id=int(update.message.chat_id), text="Здравствуйте! Вам нужно войти в свой аккаунт Google для использования этого бота")
     else:
