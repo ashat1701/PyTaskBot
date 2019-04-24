@@ -32,6 +32,8 @@ def start_callback(update, context):
         chat_id = args
         if db.is_auth(chat_id):
             context.bot.send_message(chat_id=int(chat_id), text="Вы успешно вошли в аккаунт")
+        else:
+            context.bot.send_message(chat_id=int(chat_id), text="Вам необходимо войти в аккаунт. Используйте /login")
 
 
 TOKEN = os.environ["TOKEN"]
