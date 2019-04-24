@@ -23,7 +23,7 @@ class Database:
     def is_auth(self, chat_id):
         cursor = self.conn.cursor(cursor_factory=DictCursor)
         cursor.execute("SELECT chat_id FROM auth WHERE chat_id = %s", (str(chat_id),))
-        if len(cursor.fetchone()):
+        if cursor.fetchone() is not None:
             cursor.close()
             return True
         else:
