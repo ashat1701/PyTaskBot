@@ -39,7 +39,7 @@ updater = telegram.ext.Updater(token=TOKEN, use_context=True)
 dispatcher = updater.dispatcher
 dispatcher.add_handler(telegram.ext.MessageHandler(telegram.ext.Filters.text, echo))
 dispatcher.add_handler(telegram.ext.CommandHandler('login', login))
-dispatcher.add_handler(telegram.ext.CommandHandler("start", start_callback))
+dispatcher.add_handler(telegram.ext.CommandHandler("start", start_callback, pass_args=True))
 updater.start_webhook(listen="0.0.0.0",
                       port=PORT,
                       url_path=TOKEN)
