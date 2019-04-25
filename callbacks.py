@@ -1,7 +1,8 @@
 import telegram
 import database
-import auth
+import gauth
 import calendar
+
 
 def get_menu():
     buttons = [["/plan", "/get_today_tasks"], ["/logout"]]
@@ -22,7 +23,6 @@ def logout_callback(update, context):
 
 
 def get_today_tasks(update, context):
-    return
     chat_id = update.message.chat_id
     db = database.Database()
     if db.is_auth(chat_id):
@@ -48,7 +48,7 @@ def login_callback(update, context):
     if db.is_auth(chat_id):
         context.bot.send_message(chat_id=chat_id, text="Вы уже вошли в свой аккаунт.", reply_markup=get_menu())
     else:
-        googleAuth = auth.GoogleAuth(chat_id)
+        googleAuth = gauth.GoogleAuth(chat_id)
         context.bot.send_message(chat_id=chat_id, text=googleAuth.generate_url())
 
 
