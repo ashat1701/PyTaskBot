@@ -19,7 +19,6 @@ class Database:
         cursor.execute("SELECT * FROM auth WHERE chat_id = %s", (str(chat_id),))
         return cursor.fetchone()
 
-
     def is_auth(self, chat_id):
         cursor = self.conn.cursor(cursor_factory=DictCursor)
         cursor.execute("SELECT chat_id FROM auth WHERE chat_id = %s", (str(chat_id),))
@@ -29,3 +28,9 @@ class Database:
         else:
             cursor.close()
             return False
+
+    def delete_cred(self, chat_id):
+        cursor = self.conn.cursor(cursor_factory=DictCursor)
+        cursor.execute("DELETE FROM auth WHERE chat_id = %s", (str(chat_id),))
+        self.conn.commit()
+        cursor.close()
