@@ -1,7 +1,7 @@
 import telegram
 import database
 import gauth
-import calendar
+import gcalendar
 
 
 def get_menu():
@@ -26,7 +26,7 @@ def get_today_tasks(update, context):
     chat_id = update.message.chat_id
     db = database.Database()
     if db.is_auth(chat_id):
-        response = calendar.get_today_tasks_list(chat_id)
+        response = gcalendar.get_today_tasks_list(chat_id)
         if response is str:
             context.bot.send_message(chat_id=chat_id, text=response, reply_markup=get_menu())
         else:
