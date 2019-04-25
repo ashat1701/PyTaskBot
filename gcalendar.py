@@ -8,6 +8,7 @@ def get_today_tasks_list(chat_id):
     db = database.Database()
     creds_dict = db.get_cred(chat_id)
     del creds_dict["chat_id"]
+    print(creds_dict)
     credentials = google.oauth2.credentials.Credentials(**creds_dict)
     calendar = googleapiclient.discovery.build("calendar", "v3", credentials=credentials)
     now = datetime.datetime.utcnow().isoformat() + 'Z'
