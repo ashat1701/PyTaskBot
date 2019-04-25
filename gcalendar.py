@@ -21,6 +21,6 @@ def get_today_tasks_list(chat_id):
     events_result = calendar.events().list(calendarId="primary", singleEvents=True, orderBy='startTime', timeMin=start_of_day, timeMax=end_of_day).execute()
     events = events_result.get('items', [])
     if not events:
-        return "No today events"
+        return False
     else:
         return events

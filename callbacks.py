@@ -27,8 +27,8 @@ def get_today_tasks(update, context):
     db = database.Database()
     if db.is_auth(chat_id):
         response = gcalendar.get_today_tasks_list(chat_id)
-        if response is str:
-            context.bot.send_message(chat_id=chat_id, text=response, reply_markup=get_menu())
+        if response:
+            context.bot.send_message(chat_id=chat_id, text="Ваш день сегодня свободен. Везет же)", reply_markup=get_menu())
         else:
             text = "Events for today: \n"
             counter = 1
