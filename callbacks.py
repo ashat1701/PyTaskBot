@@ -22,6 +22,7 @@ def logout_callback(update, context):
 
 
 def get_today_tasks(update, context):
+    return
     chat_id = update.message.chat_id
     db = database.Database()
     if db.is_auth(chat_id):
