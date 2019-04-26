@@ -18,7 +18,7 @@ def get_today_tasks_list(chat_id):
     end = datetime.datetime.combine(datetime.date.today(), datetime.datetime.max.time())
     end_of_day = end.isoformat() + '+03:00'
     print(start_of_day, end_of_day)
-    events_result = calendar.events().list(calendarId="primary", singleEvents=True, orderBy='startTime', timeMin=start_of_day).execute()
+    events_result = calendar.events().list(calendarId="primary", singleEvents=True, orderBy='startTime', timeMin=start_of_day, timeMax=end_of_day).execute()
     events = events_result.get('items', [])
     if not events:
         return False

@@ -35,7 +35,7 @@ def get_today_tasks(update, context):
             for event in response:
                 text = text + str(counter) + ". " + event["start"].get("dateTime", event['start'].get('date')) + "\n"
                 text = text + event["summary"] + "\n"
-                counter+=1
+                counter += 1
             context.bot.send_message(chat_id=chat_id, text=text, reply_markup=get_menu())
     else:
         reply_markup = telegram.ReplyKeyboardMarkup([["/login"]], resize_keyboard=True)
