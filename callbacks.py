@@ -2,7 +2,8 @@ import telegram
 import database
 import gauth
 import gcalendar
-
+import datetime
+import pytz
 
 def get_menu():
     buttons = [["/plan", "/get_today_tasks"], ["/logout"]]
@@ -26,7 +27,6 @@ def text_callback(update, context):
         context.bot.send_message(chat_id=update.message.chat_id, text="Задача успешно добавлена", reply_markup=get_menu())
     else:
         context.bot.send_message(chat_id=update.message.chat_id, text="Команда не распознана", reply_markup=get_menu())
-    context.bot.send_message(chat_id=update.message.chat_id, text=update.message.text)
 
 
 def plan_callback(update, context):
@@ -59,7 +59,7 @@ def get_today_tasks_callback(update, context):
         if not response:
             context.bot.send_message(chat_id=chat_id, text="Ваш день сегодня свободен. Везет же)", reply_markup=get_menu())
         else:
-            text = "Events for today: \n"
+            text = "События на сегодня: \n"
             counter = 1
             for event in response:
                 text = text + str(counter) + ". " + event["start"].get("dateTime", event['start'].get('date')) + "\n"
@@ -79,7 +79,9 @@ def login_callback(update, context):
         context.bot.send_message(chat_id=chat_id, text="Вы уже вошли в свой аккаунт.", reply_markup=get_menu())
     else:
         googleAuth = gauth.GoogleAuth(chat_id)
-        context.bot.send_message(chat_id=chat_id, text=googleAuth.generate_url())
+        reply_markup = telegram.ReplyKeyboardMarkup([["/login"]], resize_keyboard=True)
+        #TODO : strange behavior with /login twice
+        context.bot.send_message(chat_id=chat_id, text=googleAuth.generate_url(), reply_markup=reply_markup)
 
 
 def start_callback(update, context):
@@ -92,6 +94,28 @@ def start_callback(update, context):
         chat_id = args
         if db.is_auth(chat_id):
             context.bot.send_message(chat_id=int(chat_id), text="Вы успешно вошли в аккаунт", reply_markup=get_menu())
+            context.job_queue.run_daily(daily_announce, datetime.time(hour=8, minute=0, second=0, tzinfo=pytz.timezone("Europe/Moscow")))
         else:
             reply_markup = telegram.ReplyKeyboardMarkup([["/login"]], resize_keyboard=True)
             context.bot.send_message(chat_id=int(chat_id), text="Вам необходимо войти в аккаунт. Используйте /login", reply_markup=reply_markup)
+
+
+def daily_announce(bot, job):
+    # TODO: Repeating code
+    chat_id = job.context
+    db = database.Database()
+    if db.is_auth(chat_id):
+        bot.send_message(chat_id=chat_id, text="Доброе утро!")
+        response = gcalendar.get_today_tasks_list(chat_id)
+        if not response:
+            bot.send_message(chat_id=chat_id, text="Ваш день сегодня свободен. Везет же)",
+                                     reply_markup=get_menu())
+        else:
+            text = "События на сегодня: \n"
+            counter = 1
+            #TODO: add enumerate
+            for event in response:
+                text = text + str(counter) + ". " + event["start"].get("dateTime", event['start'].get('date')) + "\n"
+                text = text + event["summary"] + "\n"
+                counter += 1
+            bot.send_message(chat_id=chat_id, text=text, reply_markup=get_menu())
