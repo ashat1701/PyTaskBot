@@ -4,6 +4,8 @@ import gauth
 import gcalendar
 import datetime
 import pytz
+import dateutil.parser
+
 
 def get_menu():
     buttons = [["/plan", "/get_today_tasks"], ["/logout"]]
@@ -115,7 +117,8 @@ def daily_announce(bot, job):
             counter = 1
             #TODO: add enumerate
             for event in response:
-                text = text + str(counter) + ". " + event["start"].get("dateTime", event['start'].get('date')) + "\n"
+                date = dateutil.parser.parse( event["start"].get("dateTime", event['start'].get('date')))
+                text = text + str(counter) + ". " + date.time() + "\n"
                 text = text + event["summary"] + "\n"
                 counter += 1
             bot.send_message(chat_id=chat_id, text=text, reply_markup=get_menu())
