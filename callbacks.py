@@ -10,9 +10,38 @@ def get_menu():
     return reply_markup
 
 
-# TODO: delete this after debug
-def echo_callback(update, context):
+def text_callback(update, context):
+    reply_markup = telegram.ReplyKeyboardMarkup([["/cancel"]], resize_keyboard=True)
+    if context.user_data["state"] == "summary":
+        context.user_data["state"] = "date"
+        context.user_data["summary"] = update.message.text
+        context.bot.send_message(chat_id=update.message.chat_id, text="Введите дату в формате ГГГГ-ММ-ДД", reply_markup=reply_markup)
+    elif context.user_data["state"] == "date":
+        context.user_data["state"] = "time"
+        # TODO: check if it is correct date
+        context.user_data["date"] = update.message.text
+        context.bot.send_message(chat_id=update.message.chat_id, text="Введите время события", reply_markup=reply_markup)
+    elif context.user_data["state"] == "time":
+        gcalendar.set_new_task(update.message.chat_id, update.message.text, context.user_data["date"], context.user_data["summary"])
+        context.bot.send_message(chat_id=update.message.chat_id, text="Задача успешно добавлена", reply_markup=get_menu())
+    else:
+        context.bot.send_message(chat_id=update.message.chat_id, text="Команда не распознана", reply_markup=get_menu())
     context.bot.send_message(chat_id=update.message.chat_id, text=update.message.text)
+
+
+def plan_callback(update, context):
+    context.user_data["state"] = "summary"
+    reply_markup = telegram.ReplyKeyboardMarkup([["/cancel"]], resize_keyboard=True)
+    context.bot.send_message(chat_id=update.message.chat_id, text="Введите текст для задачи.", reply_markup=reply_markup)
+
+
+def back_callback(update, context):
+    pass
+
+
+def cancel_callback(update, context):
+    context.user_data.clear()
+    context.bot.send_message(chat_id=update.message.chat_id, text="Выберете команду", reply_markup=get_menu())
 
 
 def logout_callback(update, context):
@@ -22,7 +51,7 @@ def logout_callback(update, context):
     start_callback(update, context)
 
 
-def get_today_tasks(update, context):
+def get_today_tasks_callback(update, context):
     chat_id = update.message.chat_id
     db = database.Database()
     if db.is_auth(chat_id):
