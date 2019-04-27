@@ -44,4 +44,4 @@ def set_new_task(chat_id, time, date, summary):
             'timeZone': 'Europe/Moscow',
         },
     }
-    calendar.events().insert(calendar_id="primary", body=event).execute()
+    calendar.events().insert(calendarId="primary", body=event).execute()
