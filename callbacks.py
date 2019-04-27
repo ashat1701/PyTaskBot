@@ -118,7 +118,7 @@ def daily_announce(bot, job):
             #TODO: add enumerate
             for event in response:
                 date = dateutil.parser.parse( event["start"].get("dateTime", event['start'].get('date')))
-                text = text + str(counter) + ". " + date.time() + "\n"
+                text = text + str(counter) + ". {}:{}".format(date.time().hour, date.time().minute) +  + "\n"
                 text = text + event["summary"] + "\n"
                 counter += 1
             bot.send_message(chat_id=chat_id, text=text, reply_markup=get_menu())
