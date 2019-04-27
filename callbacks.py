@@ -15,18 +15,19 @@ def get_menu():
 
 def text_callback(update, context):
     reply_markup = telegram.ReplyKeyboardMarkup([["/cancel"]], resize_keyboard=True)
-    if context.user_data["state"] == "summary":
-        context.user_data["state"] = "date"
-        context.user_data["summary"] = update.message.text
-        context.bot.send_message(chat_id=update.message.chat_id, text="Введите дату в формате ГГГГ-ММ-ДД", reply_markup=reply_markup)
-    elif context.user_data["state"] == "date":
-        context.user_data["state"] = "time"
-        # TODO: check if it is correct date
-        context.user_data["date"] = update.message.text
-        context.bot.send_message(chat_id=update.message.chat_id, text="Введите время события", reply_markup=reply_markup)
-    elif context.user_data["state"] == "time":
-        gcalendar.set_new_task(update.message.chat_id, update.message.text, context.user_data["date"], context.user_data["summary"])
-        context.bot.send_message(chat_id=update.message.chat_id, text="Задача успешно добавлена", reply_markup=get_menu())
+    if "state" in context.user_data:
+        if context.user_data["state"] == "summary":
+            context.user_data["state"] = "date"
+            context.user_data["summary"] = update.message.text
+            context.bot.send_message(chat_id=update.message.chat_id, text="Введите дату в формате ГГГГ-ММ-ДД", reply_markup=reply_markup)
+        elif context.user_data["state"] == "date":
+            context.user_data["state"] = "time"
+            # TODO: check if it is correct date
+            context.user_data["date"] = update.message.text
+            context.bot.send_message(chat_id=update.message.chat_id, text="Введите время события", reply_markup=reply_markup)
+        elif context.user_data["state"] == "time":
+            gcalendar.set_new_task(update.message.chat_id, update.message.text, context.user_data["date"], context.user_data["summary"])
+            context.bot.send_message(chat_id=update.message.chat_id, text="Задача успешно добавлена", reply_markup=get_menu())
     else:
         context.bot.send_message(chat_id=update.message.chat_id, text="Команда не распознана", reply_markup=get_menu())
 
