@@ -1,5 +1,7 @@
-import psycopg2
+import logging
 import os
+
+import psycopg2
 from psycopg2.extras import RealDictCursor
 
 
@@ -10,8 +12,10 @@ class Database:
         if cls.__instance is None:
             cls.__instance = super().__new__(cls, *args, **kwargs)
             DATABASE_URL = os.environ['DATABASE_URL']
-            cls.__instance.conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-
+            try:
+                cls.__instance.conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+            except ConnectionError:
+                logging.error("No database in DATABASE_URL environ")
         return cls.__instance
 
     def get_cred(self, chat_id):
